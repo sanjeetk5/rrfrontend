@@ -36,23 +36,29 @@ export const hideSnackbar = () => ({
 });
 
 // ---------------- AUTH ----------------
+
+// ✅ REGISTER (NO AUTO LOGIN NOW)
 export const registerUser = (formData, navigate) => async (dispatch) => {
   try {
     dispatch(setLoading(true));
 
-    const res = await axiosInstance.post("/auth/register", formData);
-
-    localStorage.setItem("token", res.data.token);
+    await axiosInstance.post("/auth/register", formData);
 
     dispatch({
       type: REGISTER_SUCCESS,
-      payload: res.data.user,
     });
 
-    dispatch(showSnackbar("Registered Successfully 🎉", "success"));
+    dispatch(
+      showSnackbar(
+        "Account created successfully 🎉 Please login.",
+        "success"
+      )
+    );
 
     dispatch(setLoading(false));
-    navigate("/products");
+
+    // Redirect to login instead of products
+    navigate("/login");
   } catch (error) {
     dispatch(setLoading(false));
 
@@ -62,6 +68,7 @@ export const registerUser = (formData, navigate) => async (dispatch) => {
   }
 };
 
+// ✅ LOGIN (ONLY HERE LOGIN HOGA)
 export const loginUser = (formData, navigate) => async (dispatch) => {
   try {
     dispatch(setLoading(true));
@@ -78,6 +85,7 @@ export const loginUser = (formData, navigate) => async (dispatch) => {
     dispatch(showSnackbar("Login Successful ✅", "success"));
 
     dispatch(setLoading(false));
+
     navigate("/products");
   } catch (error) {
     dispatch(setLoading(false));

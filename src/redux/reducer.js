@@ -11,8 +11,12 @@ import {
   HIDE_SNACKBAR,
 } from "./actionTypes";
 
+// 🔥 Refresh handling
+const token = localStorage.getItem("token");
+
 const initialState = {
-  user: null,
+  // If token exists, assume logged in (prevents redirect on refresh)
+  user: token ? {} : null,
 
   products: [],
   total: 0,
@@ -35,13 +39,28 @@ const initialState = {
 
 const reducer = (state = initialState, action) => {
   switch (action.type) {
+    // ✅ REGISTER (no auto login)
     case REGISTER_SUCCESS:
+      return {
+        ...state,
+      };
+
+    // ✅ LOGIN (actual login happens here)
     case LOGIN_SUCCESS:
-      return { ...state, user: action.payload, error: null };
+      return {
+        ...state,
+        user: action.payload,
+        error: null,
+      };
 
     case LOGOUT:
-      return { ...state, user: null, favorites: [] };
+      return {
+        ...state,
+        user: null,
+        favorites: [],
+      };
 
+    // PRODUCTS
     case FETCH_PRODUCTS_SUCCESS:
       return {
         ...state,
@@ -52,18 +71,33 @@ const reducer = (state = initialState, action) => {
       };
 
     case FETCH_PRODUCT_DETAIL_SUCCESS:
-      return { ...state, productDetail: action.payload };
+      return {
+        ...state,
+        productDetail: action.payload,
+      };
 
+    // FAVORITES
     case FETCH_FAVORITES_SUCCESS:
-      return { ...state, favorites: action.payload };
+      return {
+        ...state,
+        favorites: action.payload,
+      };
 
+    // LOADING
     case SET_LOADING:
-      return { ...state, loading: action.payload };
+      return {
+        ...state,
+        loading: action.payload,
+      };
 
+    // ERROR
     case SET_ERROR:
-      return { ...state, error: action.payload };
+      return {
+        ...state,
+        error: action.payload,
+      };
 
-    // Snackbar
+    // SNACKBAR SHOW
     case SHOW_SNACKBAR:
       return {
         ...state,
@@ -74,6 +108,7 @@ const reducer = (state = initialState, action) => {
         },
       };
 
+    // SNACKBAR HIDE
     case HIDE_SNACKBAR:
       return {
         ...state,

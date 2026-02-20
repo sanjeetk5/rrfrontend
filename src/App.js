@@ -9,23 +9,38 @@ import ProductDetail from "./pages/ProductDetail";
 import Favorites from "./pages/Favorites";
 
 import ProtectedRoute from "./components/ProtectedRoute";
+import PublicRoute from "./components/PublicRoute";
 import SnackbarAlert from "./components/SnackbarAlert";
 
 const App = () => {
   return (
     <Router>
       <Navbar />
-
-      {/* Global Snackbar */}
       <SnackbarAlert />
 
       <Routes>
         <Route path="/" element={<Navigate to="/products" />} />
 
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
+        {/* PUBLIC ROUTES (login/register) */}
+        <Route
+          path="/login"
+          element={
+            <PublicRoute>
+              <Login />
+            </PublicRoute>
+          }
+        />
 
-        {/* Protected */}
+        <Route
+          path="/register"
+          element={
+            <PublicRoute>
+              <Register />
+            </PublicRoute>
+          }
+        />
+
+        {/* PROTECTED ROUTES */}
         <Route
           path="/products"
           element={
